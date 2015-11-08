@@ -6,7 +6,7 @@ use Composer\Autoload\ClassLoader;
 /**
  * @var ClassLoader $loader
  */
-$loader = require __DIR__.'/../vendor/autoload.php';
+$loader = require '/home/coderslab/task_planner/autoload.php';
 
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 

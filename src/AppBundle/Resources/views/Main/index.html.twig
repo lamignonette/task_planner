@@ -1,0 +1,9 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AppBundle:Main:index{% endblock %}
+
+{% block body %}
+<h1>Task planner</h1>
+    <a href="{{ path("fos_user_change_password") }}">CHANGE PASSWORD</a><br>
+    <a href="{{ path("fos_user_registration_register") }}">REGISTER</a>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Task list</h1>
+
+    <table class="records_list">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Createdat</th>
+            <th>Tobefinishedat</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('task_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.description }}</td>
+                <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.toBeFinishedAt %}{{ entity.toBeFinishedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                {% if entity.isCompleted %}
+                    <td>done</td>
+                {% else %}
+                    <td>undone</td>
+                {% endif %}
+                <td>{{ entity.priority }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('task_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('task_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                        {% if entity.isCompleted %}
+
+                        {% else %}
+                        <li><a href="{{ path('task_complete', { 'id': entity.id }) }}">done</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('task_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}
