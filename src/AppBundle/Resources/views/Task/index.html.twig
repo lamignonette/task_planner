@@ -35,14 +35,17 @@
                         <li>
                             <a href="{{ path('task_show', { 'id': entity.id }) }}">show</a>
                         </li>
-                        <li>
-                            <a href="{{ path('task_edit', { 'id': entity.id }) }}">edit</a>
-                        </li>
+
                         {% if entity.isCompleted %}
 
                         {% else %}
-                        <li><a href="{{ path('task_complete', { 'id': entity.id }) }}">done</a>
-                        </li>
+                            <li>
+                                <a href="{{ path('task_edit', { 'id': entity.id }) }}">edit</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('task_complete', { 'id': entity.id }) }}">done</a>
+                            </li>
+
                         {% endif %}
                     </ul>
                 </td>

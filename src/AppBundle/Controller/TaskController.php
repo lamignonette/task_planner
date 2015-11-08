@@ -126,6 +126,7 @@ class TaskController extends Controller
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         );
+        //@todo sort tasks by status
     }
 
     /**

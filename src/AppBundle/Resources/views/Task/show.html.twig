@@ -46,19 +46,22 @@
                 Back to the list
             </a>
         </li>
-        <li>
-            <a href="{{ path('task_edit', { 'id': entity.id }) }}">
-                Edit
-            </a>
-        </li>
+
         <li>{{ form(delete_form) }}</li>
     </ul>
 
     {% if entity.isCompleted %}
 
     {% else %}
-        <a href="{{ path('task_complete', { 'id': entity.id }) }}">
-            Done
-        </a>
+        <li>
+            <a href="{{ path('task_edit', { 'id': entity.id }) }}">
+                Edit
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('task_complete', { 'id': entity.id }) }}">
+                Done
+            </a>
+        </li>
     {% endif %}
 {% endblock %}
