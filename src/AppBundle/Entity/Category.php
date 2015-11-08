@@ -33,7 +33,7 @@ class Category
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="category")
      */
-    private $tasks;
+    protected $tasks;
 
     public function __construct()
     {

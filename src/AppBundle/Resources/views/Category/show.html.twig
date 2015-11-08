@@ -29,4 +29,9 @@
     </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
+
+    {% for task in entity.getTask %}
+        {{ task.name }} <br>
+    {% endfor %}
+
 {% endblock %}
