@@ -49,6 +49,7 @@ class CommentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $entity->setCreatedAt(new \DateTime());
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -61,6 +62,7 @@ class CommentController extends Controller
             'form'   => $form->createView(),
         );
     }
+
 
     /**
      * Creates a form to create a Comment entity.

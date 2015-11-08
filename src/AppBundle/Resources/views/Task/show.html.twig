@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Task</h1>
+    <h1>My task</h1>
 
     <table class="record_properties">
         <tbody>
@@ -10,8 +10,8 @@
             <td>{{ entity.id }}</td>
         </tr>
         <tr>
-            <th>Name</th>
-            <td>{{ entity.name }}</td>
+            <th><h2>Name: </h2></th>
+            <td><h2>{{ entity.name }}</h2></td>
         </tr>
         <tr>
             <th>Description</th>
@@ -27,6 +27,8 @@
         </tr>
         <tr>
             <th>Status</th>
+
+            {# display 'done' or 'undone' instead of 1 or 2 #}
             {% if entity.isCompleted %}
                 <td>done</td>
             {% else %}
@@ -46,10 +48,16 @@
                 Back to the list
             </a>
         </li>
+        <li>
+            <a href="{{ path('app_main_index') }}">
+                Homepage
+            </a>
+        </li>
 
         <li>{{ form(delete_form) }}</li>
     </ul>
 
+{# hide links do edit and isCompleted for tasks with status 'done' #}
     {% if entity.isCompleted %}
 
     {% else %}
@@ -64,4 +72,11 @@
             </a>
         </li>
     {% endif %}
+
+    {# show comments below each task #}
+    {% for comment in entity.getComment %}
+        {{ comment.content }} <br>
+        {{ comment.createdAt|date('Y-m-d H:i:s') }} <br><br>
+    {% endfor %}
+
 {% endblock %}
