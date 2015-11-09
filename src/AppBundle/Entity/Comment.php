@@ -26,7 +26,7 @@ class Comment
      * @ORM\ManyToOne(targetEntity="Task", inversedBy="comments")
      * @JoinColumn(name="task_id", referencedColumnName="id")
      */
-    private $task;
+    protected $task;
 
     /**
      * @var string

@@ -14,15 +14,18 @@ class CommentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
             ->add('content')
-            ->add('createdAt')
+            // ->add('createdAt')
             ->add('task', 'entity', array(
                 'class' => 'AppBundle:Task',
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'attr' => array('style' => 'display:none')
             ));
+
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

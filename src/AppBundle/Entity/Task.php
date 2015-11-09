@@ -301,7 +301,9 @@ class Task
     public function addComment(\AppBundle\Entity\Comment $comment)
     {
         $this->comments[] = $comment;
+        //$comment->setTask($this);
         return $this;
+
     }
 
     /**

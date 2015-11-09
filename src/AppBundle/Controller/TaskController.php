@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Task;
+use AppBundle\Entity\Comment;
 use AppBundle\Form\TaskType;
 
 /**
@@ -113,20 +115,36 @@ class TaskController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Task')->find($id);
+        $task = $em->getRepository('AppBundle:Task')->find($id);
 
 
-        if (!$entity) {
+        if (!$task) {
             throw $this->createNotFoundException('Unable to find Task entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
+        $comment = new Comment;
+        $comment->setTask($task);
+        $addCommentForm = $this->createCommentCreateForm($comment);
 
         return array(
-            'entity'      => $entity,
+            'entity'      => $task,
             'delete_form' => $deleteForm->createView(),
+            'add_comment_form' => $addCommentForm->createView(),
         );
         //@todo sort tasks by status
+    }
+
+    private function createCommentCreateForm(Comment $comment)
+    {
+        $form = $this->createForm(new CommentType(), $comment, array(
+            'action' => $this->generateUrl('comment_create', array('task'=>$comment->getTask()->getId())),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Add comment'));
+
+        return $form;
     }
 
     /**
@@ -276,4 +294,6 @@ class TaskController extends Controller
             ->getForm()
         ;
     }
+
+
 }

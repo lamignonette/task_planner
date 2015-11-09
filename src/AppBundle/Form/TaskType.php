@@ -21,7 +21,6 @@ class TaskType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            //->add('createdAt', 'hidden')
             ->add('toBeFinishedAt', 'date', array(
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd'))

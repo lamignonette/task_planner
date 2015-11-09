@@ -7,7 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Task;
 use AppBundle\Form\CommentType;
 
 /**
@@ -38,68 +40,48 @@ class CommentController extends Controller
     /**
      * Creates a new Comment entity.
      *
-     * @Route("/", name="comment_create")
+     * @Route("/{task}", name="comment_create")
      * @Method("POST")
      * @Template("AppBundle:Comment:new.html.twig")
+     * @ParamConverter("task", class="AppBundle:Task")
      */
-    public function createAction(Request $request)
+    public function createAction(Task $task, Request $request)
     {
-        $entity = new Comment();
-        $form = $this->createCreateForm($entity);
+
+        $comment = new Comment();
+        $form = $this->createCreateForm($comment, $task);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $entity->setCreatedAt(new \DateTime());
+            $comment->setCreatedAt(new \DateTime());
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $task->addComment($comment);
+            $em->persist($comment);
+            $em->persist($task);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('comment_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('comment_show', array('id' => $comment->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'entity' => $comment,
             'form'   => $form->createView(),
         );
     }
 
 
-    /**
-     * Creates a form to create a Comment entity.
-     *
-     * @param Comment $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Comment $entity)
+    private function createCreateForm(Comment $comment, Task $task)
     {
-        $form = $this->createForm(new CommentType(), $entity, array(
-            'action' => $this->generateUrl('comment_create'),
+        $form = $this->createForm(new CommentType(), $comment, array(
+            'action' => $this->generateUrl('comment_create', array('task'=>$task->getId())),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Add comment'));
 
         return $form;
     }
 
-    /**
-     * Displays a form to create a new Comment entity.
-     *
-     * @Route("/new", name="comment_new")
-     * @Method("GET")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $entity = new Comment();
-        $form   = $this->createCreateForm($entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
 
     /**
      * Finds and displays a Comment entity.

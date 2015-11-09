@@ -27,7 +27,13 @@
             Edit
         </a>
     </li>
+            <li>
+                <a href="{{ path('app_main_index') }}">
+                    Homepage
+                </a>
+            </li>
     <li>{{ form(delete_form) }}</li>
+
 </ul>
 
     {% for task in entity.getTask %}

@@ -145,6 +145,7 @@ class CategoryController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
+
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
