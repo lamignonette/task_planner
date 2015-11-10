@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * TaskRepository
  *
@@ -10,4 +12,13 @@ namespace AppBundle\Entity;
  */
 class TaskRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function taskToDo($date)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT t FROM AppBundle:Task t WHERE t.toBeFinishedAt < :date'
+            )
+            ->setParameter('date', $date)
+            ->getResult();
+    }
 }
