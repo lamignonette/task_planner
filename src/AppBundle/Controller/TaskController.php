@@ -34,7 +34,7 @@ class TaskController extends Controller
         $entities = $em->getRepository('AppBundle:Task')->findAll();
 
         return array(
-            'entities' => $entities,
+            'entities' => $entities, 
         );
     }
     /**
@@ -97,7 +97,7 @@ class TaskController extends Controller
     {
         $entity = new Task();
         $form   = $this->createCreateForm($entity);
-
+        
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),

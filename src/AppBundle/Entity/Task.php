@@ -321,7 +321,7 @@ class Task
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getComment()
+    public function getComments()
     {
         return $this->comments;
     }

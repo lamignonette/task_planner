@@ -11,6 +11,7 @@
             <th>Description</th>
             <th>Createdat</th>
             <th>Tobefinishedat</th>
+            <th>Comments</th>
             <th>Status</th>
             <th>Priority</th>
             <th>Actions</th>
@@ -24,6 +25,7 @@
                 <td>{{ entity.description }}</td>
                 <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if entity.toBeFinishedAt %}{{ entity.toBeFinishedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.comments|length }}</td>
                 {% if entity.isCompleted %}
                     <td>done</td>
                 {% else %}

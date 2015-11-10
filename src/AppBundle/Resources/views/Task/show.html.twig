@@ -75,7 +75,7 @@
     {% endif %}
 
     {# show comments below each task #}
-    {% for comment in entity.getComment %}
+    {% for comment in entity.getComments %}
         {{ comment.content }} <br>
         {{ comment.createdAt|date('Y-m-d H:i:s') }} <br><br>
     {% endfor %}
