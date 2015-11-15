@@ -31,12 +31,14 @@ class TaskController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:Task')->findAll();
+//user can only see his own tasks
+        $entities = $em->getRepository('AppBundle:Task')->findByUser($this->getUser());
 
         return array(
-            'entities' => $entities, 
+            'entities' => $entities,
         );
     }
+
     /**
      * Creates a new Task entity.
      *
@@ -51,6 +53,7 @@ class TaskController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $entity->setUser($this->getUser());
             $entity->setCreatedAt(new \DateTime());
             $entity->setStatus(Task::STATUS_TODO);
             $em = $this->getDoctrine()->getManager();
@@ -62,7 +65,7 @@ class TaskController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -96,11 +99,11 @@ class TaskController extends Controller
     public function newAction()
     {
         $entity = new Task();
-        $form   = $this->createCreateForm($entity);
-        
+        $form = $this->createCreateForm($entity);
+
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -116,10 +119,15 @@ class TaskController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $task = $em->getRepository('AppBundle:Task')->find($id);
-
+        //$task->setUser($this->getUser());
 
         if (!$task) {
             throw $this->createNotFoundException('Unable to find Task entity.');
+        }
+
+        //user can see only details of his own tasks
+        if ($this->getUser() != $task->getUser()) {
+            throw $this->createAccessDeniedException();
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -128,7 +136,7 @@ class TaskController extends Controller
         $addCommentForm = $this->createCommentCreateForm($comment);
 
         return array(
-            'entity'      => $task,
+            'entity' => $task,
             'delete_form' => $deleteForm->createView(),
             'add_comment_form' => $addCommentForm->createView(),
         );
@@ -138,7 +146,7 @@ class TaskController extends Controller
     private function createCommentCreateForm(Comment $comment)
     {
         $form = $this->createForm(new CommentType(), $comment, array(
-            'action' => $this->generateUrl('comment_create', array('task'=>$comment->getTask()->getId())),
+            'action' => $this->generateUrl('comment_create', array('task' => $comment->getTask()->getId())),
             'method' => 'POST',
         ));
 
@@ -155,6 +163,7 @@ class TaskController extends Controller
      * @Template()
      */
     public function completeAction($id)
+        //thanks to this action user can change status of his task's
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -191,23 +200,28 @@ class TaskController extends Controller
             throw $this->createNotFoundException('Unable to find Task entity.');
         }
 
+        //user can edit only his own task
+        if ($this->getUser() != $entity->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a Task entity.
-    *
-    * @param Task $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Task entity.
+     *
+     * @param Task $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Task $entity)
     {
         $form = $this->createForm(new TaskType(), $entity, array(
@@ -219,6 +233,7 @@ class TaskController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Task entity.
      *
@@ -247,11 +262,12 @@ class TaskController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a Task entity.
      *
@@ -269,6 +285,11 @@ class TaskController extends Controller
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Task entity.');
+            }
+
+            //user can delete inly his own tasks
+            if ($this->getUser() != $entity->getUser()) {
+                throw $this->createAccessDeniedException();
             }
 
             $em->remove($entity);
@@ -291,8 +312,7 @@ class TaskController extends Controller
             ->setAction($this->generateUrl('task_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
 
 

@@ -1,7 +1,38 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Task list</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>My tasks</h1>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    {% for entity in entities %}
+        <div class="row-3">
+            <div class="col-sm-6 col-md-4 text-center">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <div><h3>{{ entity.name }}</h3></div>
+                        <p>{{ entity.description }}</p>
+
+                        <p>{% if entity.toBeFinishedAt %}{{ entity.toBeFinishedAt|date('Y-m-d') }}{% endif %}
+                            , {{ entity.comments|length }} comments </p>
+
+                        <p><a href="#" class="btn btn-primary" role="button">Done</a> <a href="#"
+                                                                                         class="btn btn-default"
+                                                                                         role="button">Show</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
 
     <table class="records_list">
         <thead>
