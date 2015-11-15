@@ -287,10 +287,15 @@ class TaskController extends Controller
                 throw $this->createNotFoundException('Unable to find Task entity.');
             }
 
-            //user can delete inly his own tasks
+            //user can delete only his own tasks
             if ($this->getUser() != $entity->getUser()) {
                 throw $this->createAccessDeniedException();
             }
+//how to delete comments too?
+//            foreach ($entity->getComments() as $comment) {
+//                $em = $this->getDoctrine()->getManager();
+//                $comment=$em->getRepository('AppBundle:Comment')->findBy(array('id'=>$id));
+//            }
 
             $em->remove($entity);
             $em->flush();

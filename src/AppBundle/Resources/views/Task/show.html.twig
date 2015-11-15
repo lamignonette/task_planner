@@ -23,7 +23,7 @@
         </tr>
         <tr>
             <th>Tobefinishedat</th>
-            <td>{{ entity.toBeFinishedAt|date('Y-m-d H:i:s') }}</td>
+            <td>{{ entity.toBeFinishedAt|date('Y-m-d') }}</td>
         </tr>
         <tr>
             <th>Status</th>
@@ -48,17 +48,11 @@
                 Back to the list
             </a>
         </li>
-        <li>
-            <a href="{{ path('app_main_index') }}">
-                Homepage
-            </a>
-        </li>
-
         <li>{{ form(delete_form) }}</li>
         <li>{{ form(add_comment_form) }}</li>
     </ul>
 
-{# hide links do edit and isCompleted for tasks with status 'done' #}
+    {# hide links do edit and isCompleted for tasks with status 'done' #}
     {% if entity.isCompleted %}
 
     {% else %}
@@ -76,8 +70,9 @@
 
     {# show comments below each task #}
     {% for comment in entity.getComments %}
-        {{ comment.content }} <br>
-        {{ comment.createdAt|date('Y-m-d H:i:s') }} <br><br>
+        {{ comment.content }} <a href="{{ path('comment_edit', { 'id': comment.id }) }}"> Edit</a>
+        <br>
+        {{ comment.createdAt|date('Y-m-d H:i:s') }} <br>
     {% endfor %}
 
 {% endblock %}

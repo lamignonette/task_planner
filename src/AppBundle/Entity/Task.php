@@ -311,9 +311,9 @@ class Task
      *
      * @param \AppBundle\Entity\Comment $comment
      */
-    public function removeComment(\AppBundle\Entity\Comment $comment)
+    public function removeComments(\AppBundle\Entity\Comment $comments)
     {
-        $this->comments->removeElement($comment);
+        $this->comments->removeElement($comments);
     }
 
     /**
